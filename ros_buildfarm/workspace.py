@@ -101,7 +101,10 @@ def call_build_tool(
         cmd += ['--cmake-args'] + cmake_args
 
     if ctest_args:
-        cmd += ['--ctest-args'] + ctest_args
+        if build_tool == 'catkin_make_isolated':
+            cmd += ['--cmake-args'] + ctest_args
+        elif build_tool == 'colcon':
+            cmd += ['--ctest-args'] + ctest_args
 
     if make_args:
         if build_tool == 'catkin_make_isolated':
