@@ -37,6 +37,8 @@ from ros_buildfarm.common import get_distribution_repository_keys
 from ros_buildfarm.common import get_user_id
 from ros_buildfarm.templates import create_dockerfile
 
+from pprint import pprint as pp
+
 
 def main(argv=sys.argv[1:]):
     parser = argparse.ArgumentParser(
@@ -70,6 +72,7 @@ def main(argv=sys.argv[1:]):
         'custom_rosdep_urls': args.custom_rosdep_urls,
         'uid': get_user_id(),
     })
+    pp.pprint(data)
     create_dockerfile(
         'devel/devel_create_tasks.Dockerfile.em', data, args.dockerfile_dir)
 
