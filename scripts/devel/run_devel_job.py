@@ -72,7 +72,7 @@ def main(argv=sys.argv[1:]):
         'custom_rosdep_urls': args.custom_rosdep_urls,
         'uid': get_user_id(),
     })
-    pp.pprint(data)
+    pp(data)
     create_dockerfile(
         'devel/devel_create_tasks.Dockerfile.em', data, args.dockerfile_dir)
 
