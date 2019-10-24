@@ -64,6 +64,8 @@ cmds = [
 workspace_root = '/tmp/ws'
 if prerelease_overlay:
     workspace_root += ' /tmp/ws2'
+str_test_abichecker = " --testing"
+  str_test_abichecker += " --run-abichecker"
 cmd = \
     'PYTHONPATH=/tmp/ros_buildfarm:$PYTHONPATH python3 -u' + \
     ' /tmp/ros_buildfarm/scripts/devel/create_devel_task_generator.py' + \
@@ -82,8 +84,6 @@ cmds += [
     ' --dockerfile-dir /tmp/docker_build_and_install',
     cmd +
     ' --dockerfile-dir /tmp/docker_build_and_test' +
-    ' --testing' +
-    ' --run-abichecker',
+    str_test_abichecker
 ]
-}@
 CMD ["@(' && '.join(cmds))"]
