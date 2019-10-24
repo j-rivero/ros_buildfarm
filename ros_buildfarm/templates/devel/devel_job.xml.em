@@ -145,7 +145,7 @@ if pull_request:
         ' --ros-version ' + str(ros_version) +
         str_abichecker +
         ' --env-vars ' + ' '.join(build_environment_variables) +
-        ' --dockerfile-dir $WORKSPACE/docker_generating_dockers' +
+        ' --dockerfile-dir $WORKSPACE/docker_generating_dockers',
         'echo "# END SECTION"',
         '',
         'echo "# BEGIN SECTION: Build Dockerfile - generating devel tasks"',
