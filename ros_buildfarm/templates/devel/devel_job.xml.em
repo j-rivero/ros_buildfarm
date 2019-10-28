@@ -112,9 +112,9 @@ if pull_request:
     script_generating_key_files=script_generating_key_files,
 ))@
 @[if run_abichecker]
-@{ str_abichecker = " --run-abichecker" }
+@{ str_abichecker = ' --run-abichecker' }
 @[else]
-@{ str_abichecker = "" }
+@{ str_abichecker = '' }
 @[end if]
 @(SNIPPET(
     'builder_shell',
