@@ -86,4 +86,5 @@ cmds += [
     ' --dockerfile-dir /tmp/docker_build_and_test' +
     str_test_abichecker
 ]
+}@ 
 CMD ["@(' && '.join(cmds))"]
