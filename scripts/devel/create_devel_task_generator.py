@@ -188,7 +188,7 @@ def main(argv=sys.argv[1:]):
         'install_lists': [],
 
         'testing': args.testing,
-        'abichecking': args.run_abichecker,
+        'run_abichecker': args.run_abichecker,
         'workspace_root': mapped_workspaces[-1][1],
         'parent_result_space': parent_result_space,
     }
