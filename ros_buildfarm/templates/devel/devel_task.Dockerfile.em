@@ -81,6 +81,7 @@ RUN python3 -u /tmp/wrapper_scripts/apt.py update-install-clean -q -y ccache
 ))@
 
 @[if abichecking]@
+RUN echo break cache
 RUN python3 -u /tmp/wrapper_scripts/apt.py update-install-clean -q -y python3 abi-compliance-checker
 RUN pip3 install -U auto_abi_checker
 @[end if]@
