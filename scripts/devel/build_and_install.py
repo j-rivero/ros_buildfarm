@@ -20,7 +20,6 @@ import subprocess
 import sys
 
 from catkin_pkg.packages import find_packages
-
 from ros_buildfarm.argument import add_argument_build_tool
 from ros_buildfarm.argument import add_argument_build_tool_args
 from ros_buildfarm.argument import add_argument_ros_version
