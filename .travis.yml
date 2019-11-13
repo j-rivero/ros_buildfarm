@@ -198,7 +198,7 @@ matrix:
       env: JOB_TYPE=external_prerelease
       before_script:
         - sudo apt-get update
-        - sudo apt-get install -y python3-pip python3-setuptools
+        - sudo apt-get install -y python3-pip python3-setuptools  python3-catkin-pkg-modules
         - sudo pip3 install vcstool
         - python setup.py install
         - mkdir job && cd job
@@ -301,7 +301,7 @@ matrix:
       env: JOB_TYPE=external_prerelease
       before_script:
         - sudo apt-get update
-        - sudo apt-get install -y python3-pip python3-setuptools
+        - sudo apt-get install -y python3-pip python3-setuptools python3-catkin-pkg-modules
         - sudo pip3 install vcstool
         - python setup.py install
         - mkdir job && cd job
