@@ -493,6 +493,8 @@ matrix:
         - docker
       env: JOB_TYPE=prerelease UNDERLAY_REPOSITORY_NAMES="roscpp_core" OVERLAY_PACKAGE_NAMES=roscpp
       before_script:
+        - sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros.list'
+        - *rosgpgkeyadd
         - sudo apt-get update
         - sudo apt-get install -y python3-pip python3-setuptools python3-catkin-pkg-modules
         - sudo pip3 install EmPy
