@@ -33,6 +33,10 @@ def call_abi_checker(workspace_root, ros_version, env):
     # import the module only if the function is being called to reduce the
     # number of mandatory dependencies
     from catkin_pkg.packages import find_packages
+    import rosdistro
+
+    index_file = rosdistro.get_index(rosdistro.get_index_url())
+    distro_file = rosdistro.get_cached_distribution(index_file, env['ROS_DISTRO'])
 
     # TODO: pkgs detection, code based on create_devel_task_generator.py
     condition_context = {}
@@ -40,14 +44,21 @@ def call_abi_checker(workspace_root, ros_version, env):
     condition_context['ROS_VERSION'] = ros_version
     condition_context['ROS_PYTHON_VERSION'] = \
         (env or os.environ).get('ROS_PYTHON_VERSION')
-    pkgs = {}
+    pkg_names = []
+
     for ws_root in workspace_root:
         source_space = os.path.join(ws_root, 'src')
         ws_pkgs = find_packages(source_space)
+
         for pkg in ws_pkgs.values():
             pkg.evaluate_conditions(condition_context)
-        pkgs.update(ws_pkgs)
-    pkg_names = [pkg.name for pkg in pkgs.values()]
+            # Check if the packages in source space has been released
+            try:
+                if distro_file.get_release_package_xml(pkg.name):
+                    pkg_names.append(pkg.name)
+            except KeyError:
+                # unreleased packages does not affect ABI check
+                pass
     assert(pkg_names), 'No packages found in the workspace'
 
     assert(len(workspace_root) == 1), 'auto-abi tool needs the implementation of multiple local-dir'
