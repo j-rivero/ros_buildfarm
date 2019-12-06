@@ -49,7 +49,6 @@ def call_abi_checker(workspace_root, ros_version, env):
     for ws_root in workspace_root:
         source_space = os.path.join(ws_root, 'src')
         ws_pkgs = find_packages(source_space)
-
         for pkg in ws_pkgs.values():
             pkg.evaluate_conditions(condition_context)
             # Check if the packages in source space has been released
