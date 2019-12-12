@@ -23,6 +23,7 @@ from ros_buildfarm.argument import add_argument_build_tool
 from ros_buildfarm.argument import add_argument_build_tool_args
 from ros_buildfarm.argument import add_argument_ros_version
 from ros_buildfarm.argument import add_argument_run_abichecker
+from ros_buildfarm.common import get_pkgs_in_workspace
 from ros_buildfarm.common import Scope
 from ros_buildfarm.workspace import call_build_tool
 from ros_buildfarm.workspace import clean_workspace
@@ -32,35 +33,36 @@ from ros_buildfarm.workspace import ensure_workspace_exists
 def call_abi_checker(workspace_root, ros_version, env):
     # import the module only if the function is being called to reduce the
     # number of mandatory dependencies
-    from catkin_pkg.packages import find_packages
     import rosdistro
 
     index_file = rosdistro.get_index(rosdistro.get_index_url())
     distro_file = rosdistro.get_cached_distribution(index_file, env['ROS_DISTRO'])
 
-    # TODO: pkgs detection, code based on create_devel_task_generator.py
     condition_context = {}
     condition_context['ROS_DISTRO'] = env['ROS_DISTRO']
     condition_context['ROS_VERSION'] = ros_version
     condition_context['ROS_PYTHON_VERSION'] = \
         (env or os.environ).get('ROS_PYTHON_VERSION')
-    pkg_names = []
 
-    for ws_root in workspace_root:
-        source_space = os.path.join(ws_root, 'src')
-        ws_pkgs = find_packages(source_space)
-        for pkg in ws_pkgs.values():
-            pkg.evaluate_conditions(condition_context)
-            # Check if the packages in source space has been released
-            try:
-                if distro_file.get_release_package_xml(pkg.name):
-                    pkg_names.append(pkg.name)
-            except KeyError:
-                # unreleased packages does not affect ABI check
-                pass
+    pkgs = get_pkgs_in_workspace(workspace_root, condition_context)
+    pkg_names = [pkg.name for pkg in pkgs.values()]
     assert(pkg_names), 'No packages found in the workspace'
 
-    assert(len(workspace_root) == 1), 'auto-abi tool needs the implementation of multiple local-dir'
+    # Check if the packages in source space has been released
+    pkg_names_released = []
+    for pkg_name in pkg_names:
+        try:
+            if distro_file.get_release_package_xml(pkg_name):
+                pkg_names_released.append(pkg_name)
+        except KeyError:
+            # unreleased packages does not affect ABI check
+            pass
+
+    if not pkg_names_released:
+        print("No released packages found in the workspace. Skipping abi-checker run")
+        return True
+
+    assert len(workspace_root) == 1, 'auto-abi tool needs the implementation of multiple local-dir'
     # ROS_DISTRO is set in the env object
     cmd = ['auto-abi.py ' +
            '--orig-type ros-pkg --orig ' + ",".join(pkg_names) + ' ' +
@@ -130,23 +132,20 @@ def main(argv=sys.argv[1:]):
         if args.clean_after:
             clean_workspace(args.workspace_root)
 
-    # if something went bad with call_build_tool or the abi-checker is not not
-    # in use, return the rc code
-    if rc != 0 or not args.run_abichecker:
-        return rc
+    # only run abi-checker after successful builds and when requested
+    if not rc and args.run_abichecker:
+        with Scope('SUBSECTION', 'use abi checker'):
+            abi_rc = call_abi_checker(
+                [args.workspace_root],
+                args.ros_version,
+                env)
+        # Never fail a build because of abi errors but make them
+        # unstable by printing MAKE_BUILD_UNSTABLE. Jenkins will
+        # use a plugin to make it
+        if abi_rc:
+            print('MAKE_BUILD_UNSTABLE')
 
-    with Scope('SUBSECTION', 'use abi checker'):
-        rc = call_abi_checker(
-            [args.workspace_root],
-            args.ros_version,
-            env)
-    # Never fail a build because of abi errors but make them
-    # unstable by printing MAKE_BUILD_UNSTABLE. Jenkins will
-    # use a`plugin to make it
-    if rc != 0:
-        print('MAKE_BUILD_UNSTABLE')
-
-    return 0
+    return rc
 
 
 if __name__ == '__main__':
