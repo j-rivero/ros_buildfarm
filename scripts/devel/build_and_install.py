@@ -21,6 +21,7 @@ import sys
 
 from ros_buildfarm.argument import add_argument_build_tool
 from ros_buildfarm.argument import add_argument_build_tool_args
+from ros_buildfarm.argument import add_argument_require_gpu_support
 from ros_buildfarm.argument import add_argument_ros_version
 from ros_buildfarm.argument import add_argument_run_abichecker
 from ros_buildfarm.common import get_packages_in_workspaces
@@ -64,6 +65,7 @@ def main(argv=sys.argv[1:]):
     add_argument_build_tool(parser, required=True)
     add_argument_build_tool_args(parser)
     add_argument_run_abichecker(parser)
+    add_argument_require_gpu_support(parser)
     parser.add_argument(
         '--workspace-root',
         required=True,

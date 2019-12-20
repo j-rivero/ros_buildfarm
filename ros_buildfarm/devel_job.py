@@ -172,14 +172,14 @@ def configure_devel_jobs(
             run_abichecker = True
 
         # check for gpu support
-        need_gpu_support = False
+        require_gpu_support = False
         if getattr(repo.source_repository, 'tests_require_gpu', None) is False:
             pass
         elif getattr(repo.source_repository, 'tests_require_gpu', None) is None:
             pass
         else:
             print("GPU support is required for repository '%s'" % repo_name)
-            need_gpu_support = True
+            require_gpu_support = True
 
         for job_type in job_types:
             pull_request = job_type == 'pull_request'
@@ -195,7 +195,7 @@ def configure_devel_jobs(
                         groovy_script=groovy_script,
                         dry_run=dry_run,
                         run_abichecker=run_abichecker,
-                        need_gpu_support=need_gpu_support)
+                        require_gpu_support=require_gpu_support)
                     if not pull_request:
                         devel_job_names.append(job_name)
                     else:
@@ -250,7 +250,7 @@ def configure_devel_job(
         build_targets=None,
         dry_run=False,
         run_abichecker=None,
-        need_gpu_support=None):
+        require_gpu_support=None):
     """
     Configure a single Jenkins devel job.
 
@@ -330,7 +330,7 @@ def configure_devel_job(
         build_file, os_name, os_code_name, arch, source_repository,
         repo_name, pull_request, job_name, dist_cache=dist_cache,
         is_disabled=is_disabled, run_abichecker=run_abichecker,
-        need_gpu_support=need_gpu_support)
+        require_gpu_support=require_gpu_support)
     # jenkinsapi.jenkins.Jenkins evaluates to false if job count is zero
     if isinstance(jenkins, object) and jenkins is not False:
         from ros_buildfarm.jenkins import configure_job
@@ -351,7 +351,7 @@ def _get_devel_job_config(
         build_file, os_name, os_code_name, arch, source_repo_spec,
         repo_name, pull_request, job_name, dist_cache=None,
         is_disabled=False, run_abichecker=None,
-        need_gpu_support=None):
+        require_gpu_support=None):
     template_name = 'devel/devel_job.xml.em'
 
     repository_args, script_generating_key_files = \
@@ -423,7 +423,7 @@ def _get_devel_job_config(
         'build_environment_variables': build_environment_variables,
 
         'run_abichecker': run_abichecker,
-        'need_gpu_support': need_gpu_support,
+        'require_gpu_support': require_gpu_support,
         'notify_compiler_warnings': build_file.notify_compiler_warnings,
         'notify_emails': build_file.notify_emails,
         'maintainer_emails': maintainer_emails,

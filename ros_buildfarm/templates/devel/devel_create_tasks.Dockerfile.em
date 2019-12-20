@@ -85,6 +85,8 @@ cmd = \
     ' --env-vars ' + ' ' .join(env_vars)
 if run_abichecker:
     cmd += ' --run-abichecker'
+if require_gpu_support:
+    cmd += ' --require-gpu-support'
 cmds += [
     cmd +
     ' --dockerfile-dir /tmp/docker_build_and_install',
