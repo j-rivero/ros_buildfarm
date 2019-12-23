@@ -175,7 +175,8 @@ def configure_devel_jobs(
         require_gpu_support = False
         if getattr(repo.source_repository, 'tests_require_gpu', None) is False:
             pass
-        elif getattr(repo.source_repository, 'tests_require_gpu', None) is None:
+        elif getattr(repo.source_repository, 'tests_require_gpu', None) is None and \
+                not build_file.tests_require_gpu_default:
             pass
         else:
             print("GPU support is required for repository '%s'" % repo_name)
