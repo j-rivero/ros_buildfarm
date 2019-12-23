@@ -32,7 +32,6 @@ from ros_buildfarm.common import get_binary_package_versions
 from ros_buildfarm.common import get_distribution_repository_keys
 from ros_buildfarm.common import get_packages_in_workspaces
 from ros_buildfarm.common import get_user_id
-from ros_buildfarm.common import has_gpu_support
 from ros_buildfarm.templates import create_dockerfile
 from rosdep2 import create_default_installer_context
 from rosdep2.catkin_support import get_catkin_view
@@ -187,7 +186,6 @@ def main(argv=sys.argv[1:]):
         'require_gpu_support': args.require_gpu_support,
         'workspace_root': mapped_workspaces[-1][1],
         'parent_result_space': parent_result_space,
-        'use_nvidia_runtime': has_gpu_support(),
     }
     create_dockerfile(
         'devel/devel_task.Dockerfile.em', data, args.dockerfile_dir)

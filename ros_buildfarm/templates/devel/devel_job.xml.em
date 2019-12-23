@@ -189,12 +189,8 @@ if pull_request:
         'echo "# END SECTION"',
         '',
         'echo "# BEGIN SECTION: Run Dockerfile - build and install"',
-        'docker_run_cmd="docker run"',
-        'if $(ls /dev/nvidia* > /dev/null); then',
-        '  docker_run_cmd="${docker_run_cmd} --env=DISPLAY=:0.0 --env=QT_X11_NO_MITSHM=1 --volume=/tmp/.X11-unix:/tmp/.X11-unix:rw --runtime=nvidia"',
-        'fi',
-        '',
-        '${docker_run_cmd}' +
+        'docker run' +
+        (' --env=DISPLAY=:0.0 --env=QT_X11_NO_MITSHM=1 --volume=/tmp/.X11-unix:/tmp/.X11-unix:rw --runtime=nvidia' if require_gpu_support else '') +
         ' --rm ' +
         ' --cidfile=$WORKSPACE/docker_build_and_install/docker.cid' +
         ' -e=TRAVIS=$TRAVIS' +
