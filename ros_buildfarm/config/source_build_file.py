@@ -123,7 +123,7 @@ class SourceBuildFile(BuildFile):
                 self.test_abi_force = bool(
                     data['test_abi']['force'])
 
-        self.tests_require_gpu_only = False
+        self.run_only_gpu_tests = False
         self.tests_require_gpu_default = False
         if 'tests_require_gpu' in data:
             if 'default' in data['tests_require_gpu']:

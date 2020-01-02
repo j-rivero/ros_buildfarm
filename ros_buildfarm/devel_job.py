@@ -186,7 +186,7 @@ def configure_devel_jobs(
             if getattr(repo.source_repository, 'run_only_gpu_tests', None) is False:
                 pass
             elif getattr(repo.source_repository, 'run_only_gpu_tests', None) is None and \
-                    not build_file.run_only_gpu_tests_default:
+                    not build_file.run_only_gpu_tests:
                 pass
             else:
                 print('  - only GPU tests will be run')
