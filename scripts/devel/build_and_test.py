@@ -78,14 +78,14 @@ def main(argv=sys.argv[1:]):
                 '-DCATKIN_TEST_RESULTS_DIR=%s' % test_results_dir]
             # Check gpu support
             # No GPU support will exclude gpu_test tag by default
-            ctest_args = ['-LE "gpu_test"']
+            ctest_args = ['-LE', 'gpu_test']
             if args.require_gpu_support:
                 if not has_gpu_support():
                     print('--require-gpu-support is enabled but can not '
                           'detect nvidia support installed')
                     sys.exit(-1)
                 if args.run_only_gpu_tests:
-                    ctest_args = ['-L "gpu_test"']
+                    ctest_args = ['-L', 'gpu_test']
                 else:
                     # GPU support, run all tests
                     ctest_args = []
