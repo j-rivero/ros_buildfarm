@@ -116,7 +116,7 @@ else:
         ' --rosdistro-name %s' % rosdistro_name
     if require_gpu_support:
         cmd += ' --require-gpu-support'
-	if run_only_gpu_tests:
+        if run_only_gpu_tests:
             cmd += ' --run-only-gpu-tests'
 cmd += \
     ' --build-tool ' + build_tool + \
