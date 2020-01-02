@@ -87,6 +87,8 @@ if run_abichecker:
     cmd += ' --run-abichecker'
 if require_gpu_support:
     cmd += ' --require-gpu-support'
+    if run_only_gpu_tests:
+        cmd += ' --run-only-gpu-tests'
 cmds += [
     cmd +
     ' --dockerfile-dir /tmp/docker_build_and_install',

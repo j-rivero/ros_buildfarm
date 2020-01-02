@@ -173,6 +173,7 @@ def configure_devel_jobs(
 
         # check for gpu support
         require_gpu_support = False
+        run_only_gpu_tests = False
         if getattr(repo.source_repository, 'tests_require_gpu', None) is False:
             pass
         elif getattr(repo.source_repository, 'tests_require_gpu', None) is None and \
@@ -181,6 +182,15 @@ def configure_devel_jobs(
         else:
             print("GPU support is required for repository '%s'" % repo_name)
             require_gpu_support = True
+            # check if only gpu tests needs to be run
+            if getattr(repo.source_repository, 'run_only_gpu_tests', None) is False:
+                pass
+            elif getattr(repo.source_repository, 'run_only_gpu_tests', None) is None and \
+                    not build_file.run_only_gpu_tests_default:
+                pass
+            else:
+                print('  - only GPU tests will be run')
+                run_only_gpu_tests = True
 
         for job_type in job_types:
             pull_request = job_type == 'pull_request'
@@ -196,7 +206,8 @@ def configure_devel_jobs(
                         groovy_script=groovy_script,
                         dry_run=dry_run,
                         run_abichecker=run_abichecker,
-                        require_gpu_support=require_gpu_support)
+                        require_gpu_support=require_gpu_support,
+                        run_only_gpu_tests=run_only_gpu_tests)
                     if not pull_request:
                         devel_job_names.append(job_name)
                     else:

@@ -130,8 +130,9 @@ class SourceBuildFile(BuildFile):
                 self.tests_require_gpu_default = bool(
                     data['tests_require_gpu']['default'])
             if 'run_only_gpu_tests' in data['tests_require_gpu']:
-                self.tests_require_gpu_only = bool(
-                    data['tests_require_gpu']['run_only_gpu_tests'])
+                if 'default' in data['tests_require_gpu']['run_only_gpu_tests']:
+                    self.run_only_gpu_tests = bool(
+                        data['tests_require_gpu']['run_only_gpu_tests']['default']
 
         self.collate_test_stats = bool(data.get('collate_test_stats', False))
 
