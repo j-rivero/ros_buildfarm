@@ -21,7 +21,6 @@ import sys
 from ros_buildfarm.argument import add_argument_build_tool
 from ros_buildfarm.argument import add_argument_build_tool_args
 from ros_buildfarm.argument import add_argument_require_gpu_support
-from ros_buildfarm.common import has_gpu_support
 from ros_buildfarm.common import Scope
 from ros_buildfarm.workspace import call_build_tool
 from ros_buildfarm.workspace import clean_workspace
@@ -76,12 +75,6 @@ def main(argv=sys.argv[1:]):
                 '-DBUILD_TESTING=1',
                 '-DCATKIN_ENABLE_TESTING=1', '-DCATKIN_SKIP_TESTING=0',
                 '-DCATKIN_TEST_RESULTS_DIR=%s' % test_results_dir]
-            # Check gpu support
-            if args.require_gpu_support:
-                if not has_gpu_support():
-                    print('--require-gpu-support is enabled but can not '
-                          'detect nvidia support installed')
-                    sys.exit(-1)
             additional_args = args.build_tool_args or []
             if args.build_tool == 'colcon':
                 additional_args += ['--test-result-base', test_results_dir]

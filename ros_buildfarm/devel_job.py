@@ -26,6 +26,7 @@ from ros_buildfarm.common import get_node_label
 from ros_buildfarm.common \
     import get_repositories_and_script_generating_key_files
 from ros_buildfarm.common import git_github_orgunit
+from ros_buildfarm.common import has_gpu_support
 from ros_buildfarm.common import JobValidationError
 from ros_buildfarm.common import write_groovy_script_and_configs
 from ros_buildfarm.config import get_distribution_file
@@ -387,6 +388,13 @@ def _get_devel_job_config(
         .get('distribution_type', 'ros1')
     assert distribution_type in ('ros1', 'ros2')
     ros_version = 1 if distribution_type == 'ros1' else 2
+
+    # Check gpu support
+    if require_gpu_support:
+        if not has_gpu_support():
+            print('--require-gpu-support is enabled but can not '
+                  'detect nvidia support installed')
+            sys.exit(-1)
 
     job_data = {
         'github_url': get_github_project_url(source_repo_spec.url),
