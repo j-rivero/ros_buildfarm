@@ -192,7 +192,7 @@ if pull_request:
         'echo faaa',
         'if [ ! -d "$HOME/.ccache" ]; then mkdir $HOME/.ccache; fi',
         ('if [ ! -c /dev/nvidia[0-9] ]; then echo "--require-gpu-support is enabled but can not detect nvidia support installed" && exit 1; fi' if require_gpu_support else ''),
-        ' docker run' +
+        'docker run' +
         (' --env=DISPLAY=:0.0 --env=QT_X11_NO_MITSHM=1 --volume=/tmp/.X11-unix:/tmp/.X11-unix:rw --gpus all' if require_gpu_support else '') +
         ' --rm ' +
         ' --cidfile=$WORKSPACE/docker_build_and_install/docker.cid' +
@@ -223,12 +223,8 @@ if pull_request:
         'echo "# BEGIN SECTION: Run Dockerfile - build and test"',
         ''
         'if [ ! -d "$HOME/.ccache" ]; then mkdir $HOME/.ccache; fi',
-        'docker_run_cmd="docker run"',
-        'if $(ls /dev/nvidia* > /dev/null); then',
-        '  docker_run_cmd="${docker_run_cmd} --env=DISPLAY=:0.0 --env=QT_X11_NO_MITSHM=1 --volume=/tmp/.X11-unix:/tmp/.X11-unix:rw  --gpus all"',
-        'fi',
         '',
-        '${docker_run_cmd}' +
+        ('docker run --env=DISPLAY=:0.0 --env=QT_X11_NO_MITSHM=1 --volume=/tmp/.X11-unix:/tmp/.X11-unix:rw  --gpus all' if require_gpu_support else 'docker run') +
         ' --rm ' +
         ' --cidfile=$WORKSPACE/docker_build_and_test/docker.cid' +
         ' -e=TRAVIS=$TRAVIS' +
