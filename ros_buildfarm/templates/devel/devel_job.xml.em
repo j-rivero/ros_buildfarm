@@ -189,6 +189,7 @@ if pull_request:
         'echo "# END SECTION"',
         '',
         'echo "# BEGIN SECTION: Run Dockerfile - build and install"',
+        'echo faaa',
         'if [ ! -d "$HOME/.ccache" ]; then mkdir $HOME/.ccache; fi',
         'echo faaa',
         'if [ ! -c /dev/nvidia0 ]; then echo "foo"; fi',
