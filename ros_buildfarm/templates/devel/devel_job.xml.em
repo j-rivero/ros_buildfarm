@@ -193,7 +193,6 @@ if pull_request:
         'echo faaa',
         'if [ ! -c /dev/nvidia0 ]; then echo "foo"; fi',
         'echo feee',
-        ('if [ ! -c /dev/nvidia[0-9] ]; then echo "--require-gpu-support is enabled but can not detect nvidia support installed" && exit 1; fi' if require_gpu_support else '') +
         'docker run' +
         (' --env=DISPLAY=:0.0 --env=QT_X11_NO_MITSHM=1 --volume=/tmp/.X11-unix:/tmp/.X11-unix:rw --gpus all' if require_gpu_support else '') +
         ' --rm ' +
