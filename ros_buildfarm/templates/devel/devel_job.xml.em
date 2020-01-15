@@ -140,7 +140,6 @@ if pull_request:
         ' --ros-version ' + str(ros_version) +
         (' --run-abichecker' if run_abichecker else '') +
         (' --require-gpu-support' if require_gpu_support else '') +
-        (' --run-only-gpu-tests' if run_only_gpu_tests else '') +
         ' --env-vars ' + ' '.join(build_environment_variables) +
         ' --dockerfile-dir $WORKSPACE/docker_generating_dockers',
         'echo "# END SECTION"',
