@@ -13,7 +13,6 @@
 # limitations under the License.
 
 from collections import namedtuple
-import glob
 import os
 import platform
 try:
